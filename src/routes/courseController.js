@@ -11,7 +11,18 @@ const getCourses = async (req, res) => {
   }
 };
 
+const searchCourses = async (req, res) => {
+  try {
+    const query = req.query.query || '';
+    const courses = await courseService.searchCourses(query);
+    res.status(200).json(courses);
+  } catch (error) {
+    console.error('Error searching courses:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 module.exports = {
-  getCourses
+  getCourses,
+  searchCourses
 };
