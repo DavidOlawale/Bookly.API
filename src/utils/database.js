@@ -5,6 +5,9 @@ let db;
 
 const connectDB = async () => {
   try {
+    let a = process.env.MONGODB_URI;
+    console.log('process.env.MONGODB_URI: ',process.env.MONGODB_URI);
+    debugger;
     client = new MongoClient(process.env.MONGODB_URI || 'mongodb://localhost:27017');
     await client.connect();
     db = client.db('BooklyDB');
