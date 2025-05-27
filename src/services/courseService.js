@@ -1,13 +1,13 @@
 const { getDb } = require('../utils/database');
 
 const getAllCourses = async () => {
-  const db = getDb();
+  const db = await getDb();
   const collection = db.collection("courses");
   return await collection.find({}).toArray();
 };
 
 const searchCourses = async (query) => {
-  const db = getDb();
+  const db = await getDb();
   const collection = db.collection("courses");
   return await collection.find({
     name: { $regex: query, $options: 'i' }
@@ -15,7 +15,7 @@ const searchCourses = async (query) => {
 };
 
 const updateCourseSpaces = async (courseName, quantity) => {
-  const db = getDb();
+  const db = await getDb();
   const collection = db.collection("courses");
   
   // Find course by name

@@ -2,7 +2,7 @@ const { getDb } = require('../utils/database');
 const courseService = require('./courseService');
 
 const createOrder = async (orderData) => {
-  const db = getDb();
+  const db = await getDb();
   const collection = db.collection("orders");
   
   // Insert the order
