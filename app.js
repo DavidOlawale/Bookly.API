@@ -11,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use(loggerMiddleware);
 
+// serve static assets (lesson images)
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 app.use('/api', apiRoutes);
