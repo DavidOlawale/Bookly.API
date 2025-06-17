@@ -23,7 +23,7 @@ exports.updateLesson = async (req, res) => {
         }
 
         const result = await db.collection('lessons').updateOne(
-            { _id: new ObjectId(id) },
+            { _id: id },
             { $set: { availableSpaces: availableSpaces } }
         );
 
