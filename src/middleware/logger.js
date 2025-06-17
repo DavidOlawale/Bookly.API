@@ -1,6 +1,10 @@
-const logger = (req, res, next) => {
-  console.log(`A ${req.method} request came from ${req.url}`);
-  next();
+
+const loggerMiddleware = (req, res, next) => {
+    const timestamp = new Date().toISOString();
+    const { method, url, ip } = req;
+    
+    console.log(`[${timestamp}] ${method} ${url}`);    
+    next();
 };
 
-module.exports = logger;
+module.exports = loggerMiddleware;

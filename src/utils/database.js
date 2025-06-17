@@ -1,38 +1,28 @@
 const { MongoClient } = require('mongodb');
 
-let client;
+const uri = process.env.MONGO_URI;
+const dbName = process.env.DB_NAME;
+const client = new MongoClient(uri);
+
 let db;
 
-const connectDB = async () => {
-  try {
-    let a = process.env.MONGODB_URI;
-    debugger;
-    client = new MongoClient(process.env.MONGODB_URI || 'mongodb://localhost:27017');
-    await client.connect();
-    db = client.db('BooklyDB');
-    console.log('Connected to MongoDB');
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    process.exit(1);
-  }
+const connectToDb = async () => {
+    if (db) return db; // If already connected, return the existing connection
+    try {
+        await client.connect();
+        console.log("Successfully connected to MongoDB Atlas!");
+        db = client.db(dbName);
+    } catch (error) {
+        console.error("Could not connect to DB", error);
+        throw error;
+    }
 };
 
-const getDb = async () => {
-  if (!db) {
-    await connectDB();
-  }
-  return db;
+const getDb = () => {
+    if (!db) {
+        throw new Error("Database not initialized. Call connectToDb first.");
+    }
+    return db;
 };
 
-const closeDB = async () => {
-  if (client) {
-    await client.close();
-    console.log('MongoDB connection closed');
-  }
-};
-
-module.exports = {
-  connectDB,
-  getDb,
-  closeDB
-};
+module.exports = { connectToDb, getDb };
