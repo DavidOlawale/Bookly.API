@@ -1,31 +1,23 @@
-const { getDb } = require('../utils/database');
-const { ObjectId } = require('mongodb');
+const lessonService = require('../services/lessonService');
 
+// Get all lessons endpoint
 exports.getAllLessons = async (req, res) => {
     try {
-        const db = getDb();
-        const lessons = await db.collection('lessons').find({}).toArray();
+        const lessons = await lessonService.getAllLessons();
         res.status(200).json(lessons);
     } catch (error) {
-        console.error("Error fetching lessons:", error);
+        console.error("Error in lessonController.getAllLessons:", error);
         res.status(500).json({ message: 'Failed to retrieve lessons.' });
     }
 };
 
+// Update a lesson endpoint
 exports.updateLesson = async (req, res) => {
     try {
-        const db = getDb();
         const { id } = req.params;
         const { availableSpaces } = req.body;
 
-        if (typeof availableSpaces !== 'number') {
-            return res.status(400).json({ message: 'Invalid availableSpaces value.' });
-        }
-
-        const result = await db.collection('lessons').updateOne(
-            { _id: id },
-            { $set: { availableSpaces: availableSpaces } }
-        );
+        const result = await lessonService.updateLesson(id, availableSpaces);
 
         if (result.matchedCount === 0) {
             return res.status(404).json({ message: 'Lesson not found.' });
@@ -34,7 +26,11 @@ exports.updateLesson = async (req, res) => {
         res.status(200).json({ message: 'Lesson updated successfully.' });
 
     } catch (error) {
-        console.error("Error updating lesson:", error);
+        console.error("Error in lessonController.updateLesson:", error);
+        // If the service threw a validation error, it might be a user error
+        if (error.message.includes('Invalid')) {
+            return res.status(400).json({ message: error.message });
+        }
         res.status(500).json({ message: 'Failed to update lesson.' });
     }
 };
