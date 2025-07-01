@@ -11,12 +11,12 @@ exports.findAll = async () => {
 exports.updateSpaces = async (id, availableSpaces) => {
     const db = getDb();
     return await db.collection('lessons').updateOne(
-        { _id: new ObjectId(id) }, // Correctly use ObjectId
+        { _id: new ObjectId(id) },
         { $set: { availableSpaces: availableSpaces } }
     );
 };
 
-// Searches for lessons based on a query string (case-insensitive)
+// Searches for lessons based on a query string
 exports.search = async (query) => {
     const db = getDb();
     return await db.collection('lessons').find({
