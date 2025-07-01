@@ -2,6 +2,7 @@ const express = require('express');
 const lessonRoutes = require('./lessons');
 const orderRoutes = require('./orders');
 const { getDb } = require('../utils/database');
+const lessonService = require('../services/lessonService');
 
 const router = express.Router();
 
